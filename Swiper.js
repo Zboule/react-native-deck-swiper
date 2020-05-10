@@ -89,23 +89,11 @@ class Swiper extends Component {
   }
 
   getCardStyle = () => {
-    const { height, width } = Dimensions.get('window')
-    const {
-      cardVerticalMargin,
-      cardHorizontalMargin,
-      marginTop,
-      marginBottom
-    } = this.props
-
-    const cardWidth = width - cardHorizontalMargin * 2
-    const cardHeight =
-      height - cardVerticalMargin * 2 - marginTop - marginBottom
-
     return {
-      top: cardVerticalMargin,
-      left: cardHorizontalMargin,
-      width: cardWidth,
-      height: cardHeight
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%"
     }
   }
 
