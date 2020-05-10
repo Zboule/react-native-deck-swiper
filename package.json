@@ -32,7 +32,8 @@
     },
     "homepage": "https://github.com/alexbrillant/react-native-deck-swiper#readme",
     "dependencies": {
-        "prop-types": "15.5.10"
+        "prop-types": "15.5.10",
+        "react-native-view-overflow": "0.0.5"
     },
     "peerDependencies": {
         "react-native-view-overflow": "0.0.4",
