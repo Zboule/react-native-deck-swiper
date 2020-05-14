@@ -20,7 +20,7 @@ const calculateCardIndexes = (firstCardIndex, cards) => {
   firstCardIndex = firstCardIndex || 0
   const previousCardIndex = firstCardIndex === 0 ? cards.length - 1 : firstCardIndex - 1
   const secondCardIndex = firstCardIndex === cards.length - 1 ? 0 : firstCardIndex + 1
-  return { firstCardIndex, secondCardIndex, previousCardIndex }
+  return { firstCardIndex:0, secondCardIndex:1, previousCardIndex :-1}
 }
 
 const rebuildStackAnimatedValues = (props) => {
@@ -31,11 +31,13 @@ const rebuildStackAnimatedValues = (props) => {
     stackPositionsAndScales[`stackPosition${position}`] = new Animated.Value(stackSeparation * position)
     stackPositionsAndScales[`stackScale${position}`] = new Animated.Value((100 - stackScale * position) * 0.01)
   }
+  
 
   return stackPositionsAndScales
 }
 
 class Swiper extends Component {
+  
   constructor (props) {
     super(props)
 
@@ -76,9 +78,17 @@ class Swiper extends Component {
       nextState.secondCardIndex !== state.secondCardIndex ||
       nextState.previousCardIndex !== state.previousCardIndex ||
       nextState.labelType !== state.labelType ||
-      nextState.swipedAllCards !== state.swipedAllCards
+      nextState.swipedAllCards !== state.swipedAllCards ||
+      nextState.stackScale1 !== state.stackScale1
     )
     return propsChanged || stateChanged
+  }
+
+  componentDidUpdate(prevProps){
+    if (prevProps.cards !== this.props.cards){
+      const newProps = {...rebuildStackAnimatedValues(this.props)}
+      this.setState(newProps)
+    }
   }
 
   componentWillUnmount = () => {
@@ -151,6 +161,8 @@ class Swiper extends Component {
       isSwipingTop,
       isSwipingBottom
 
+
+
     if (Math.abs(this._animatedValueX) > Math.abs(this._animatedValueY) && Math.abs(this._animatedValueX) > overlayOpacityHorizontalThreshold) {
       if (this._animatedValueX > 0) isSwipingRight = true
       else isSwipingLeft = true
@@ -158,6 +170,8 @@ class Swiper extends Component {
       if (this._animatedValueY > 0) isSwipingBottom = true
       else isSwipingTop = true
     }
+
+
 
     if (isSwipingRight) {
       this.setState({ labelType: LABEL_TYPES.RIGHT })
@@ -666,11 +680,13 @@ class Swiper extends Component {
         outputRange: this.props.outputOverlayLabelsOpacityRangeX
       })
     } else {
+
       opacity = this.state.pan.y.interpolate({
         inputRange: this.props.inputOverlayLabelsOpacityRangeY,
         outputRange: this.props.outputOverlayLabelsOpacityRangeY
       })
     }
+
 
     return opacity
   }
@@ -807,6 +823,8 @@ class Swiper extends Component {
       (labelType === LABEL_TYPES.RIGHT && disableRightSwipe) ||
       (labelType === LABEL_TYPES.TOP && disableTopSwipe)
 
+
+
     if (
       !overlayLabels ||
       !overlayLabels[labelType] ||
@@ -815,6 +833,8 @@ class Swiper extends Component {
     ) {
       return null
     }
+
+
 
     return (
       <Animated.View style={this.calculateOverlayLabelWrapperStyle()}>
