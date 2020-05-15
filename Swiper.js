@@ -773,7 +773,8 @@ class Swiper extends Component {
     let index = firstCardIndex
     let firstCard = true
     let cardPosition = 0
-    while (index < cards.length && stackSize-- > 0 && (firstCard || showSecondCard) && !swipedAllCards) {
+
+    while (index < cards.length && stackSize-- > 0 && (firstCard || showSecondCard)) {
       const key = this.getCardKey(cards[index], index)
       this.pushCardToStack(renderedCards, index, cardPosition, key, firstCard)
 
@@ -787,6 +788,7 @@ class Swiper extends Component {
       }
       cardPosition++
     }
+    console.log("Rendered cqrds", renderedCards)
     return renderedCards
   }
 
