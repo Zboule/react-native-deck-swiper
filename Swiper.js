@@ -753,14 +753,13 @@ class Swiper extends Component {
     const stackCardZoomStyle = this.calculateStackCardZoomStyle(position)
     const stackCard = this.props.renderCard(cards[index], index)
     const swipableCardStyle = this.calculateSwipableCardStyle()
-    const renderOverlayLabel = this.renderOverlayLabel()
     renderedCards.push(
       <Animated.View
         key={key}
         style={firstCard ? swipableCardStyle : stackCardZoomStyle}
         {...this._panResponder.panHandlers}
       >
-        {firstCard ? renderOverlayLabel : null}
+        {firstCard ? this.renderOverlayLabel(cards[index]) : null}
         {stackCard}
       </Animated.View>
     )
@@ -788,7 +787,6 @@ class Swiper extends Component {
       }
       cardPosition++
     }
-    console.log("Rendered cqrds", renderedCards)
     return renderedCards
   }
 
@@ -806,7 +804,7 @@ class Swiper extends Component {
     )
   }
 
-  renderOverlayLabel = () => {
+  renderOverlayLabel = (card) => {
     const {
       disableBottomSwipe,
       disableLeftSwipe,
@@ -835,18 +833,12 @@ class Swiper extends Component {
       return null
     }
 
-
+    console.log(card.rightTimeout)
 
     return (
       <Animated.View style={this.calculateOverlayLabelWrapperStyle()}>
-        {!overlayLabels[labelType].element &&
-          <Text style={this.calculateOverlayLabelStyle()}>
-            {overlayLabels[labelType].title}
-          </Text>
-        }
-
-        {overlayLabels[labelType].element &&
-          overlayLabels[labelType].element
+        {overlayLabels[labelType].render &&
+          overlayLabels[labelType].render(card)
         }
       </Animated.View>
     )
