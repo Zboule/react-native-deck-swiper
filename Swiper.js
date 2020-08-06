@@ -234,6 +234,7 @@ class Swiper extends Component {
   }
 
   onPanResponderRelease = (e, gestureState) => {
+    console.log('Release')
     this.props.dragEnd && this.props.dragEnd()
     if (this.state.panResponderLocked) {
       this.state.pan.setValue({
@@ -255,7 +256,7 @@ class Swiper extends Component {
 
     const isSwiping = animatedValueX > horizontalThreshold || animatedValueY > verticalThreshold
 
-    if (!this.state.slideGesture) {
+    if (this.state.pan.x === 0 && this.state.pan.y === 0) {
       this.props.onTapCard(this.state.firstCardIndex)
       this.setState({
         labelType: LABEL_TYPES.NONE,
@@ -284,10 +285,11 @@ class Swiper extends Component {
           slideGesture: false,
         })
       } else {
-        this.resetTopCard()
-        this.setState({
-          labelType: LABEL_TYPES.NONE,
-          slideGesture: false,
+        this.resetTopCard(() => {
+          this.setState({
+            labelType: LABEL_TYPES.NONE,
+            slideGesture: false,
+          })
         })
       }
     }
@@ -342,19 +344,20 @@ class Swiper extends Component {
   }
 
   resetTopCard = (cb) => {
+    this.state.pan.setOffset({
+      x: 0,
+      y: 0,
+    })
     Animated.spring(this.state.pan, {
       toValue: 0,
       friction: this.props.topCardResetAnimationFriction,
       tension: this.props.topCardResetAnimationTension,
       useNativeDriver: true,
-    }).start(cb)
-
-    this.state.pan.setOffset({
-      x: 0,
-      y: 0,
+    }).start(() => {
+      cb()
     })
 
-    this.props.onSwipedAborted()
+    // this.props.onSwipedAborted()
   }
 
   swipeBack = (cb) => {
