@@ -234,7 +234,6 @@ class Swiper extends Component {
   }
 
   onPanResponderRelease = (e, gestureState) => {
-    console.log('Release')
     this.props.dragEnd && this.props.dragEnd()
     if (this.state.panResponderLocked) {
       this.state.pan.setValue({
@@ -256,7 +255,7 @@ class Swiper extends Component {
 
     const isSwiping = animatedValueX > horizontalThreshold || animatedValueY > verticalThreshold
 
-    if (this.state.pan.x === 0 && this.state.pan.y === 0) {
+    if (this.state.pan.x._value === 0 && this.state.pan.y._value === 0) {
       this.props.onTapCard(this.state.firstCardIndex)
       this.setState({
         labelType: LABEL_TYPES.NONE,
